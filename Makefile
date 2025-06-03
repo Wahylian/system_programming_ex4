@@ -1,18 +1,19 @@
 # rido1607@gmail.com
 CXX=clang++
-CXXFLAGS=-Wall -Werror -std=c++2a 
+CXXFLAGS=-Wall -Werror -std=c++2a -I.
 
 # object files for the functors 
 FUNC_OBJ = Functors/ascending.o Functors/descending.o
 
 # object files for the container
-CONTAINER_OBJ = container.o $(FUNC_OBJ)
+CONTAINER_OBJ = container.o customExceptions.o $(FUNC_OBJ)
 
 # object files for custom classes to be used in the tests
 CUSTOM_OBJ = CustomStructs/complex.o
 
 # object files for the test files
-TEST_OBJ = Tests/testFile.o $(CUSTOM_OBJ) Tests/testAscending.o Tests/testDescending.o
+TEST_OBJ = Tests/testFile.o $(CUSTOM_OBJ) Tests/testAscending.o Tests/testDescending.o \
+		Tests/testContainer.o
 
 # valgrind flags, taken from course site, folder 02-classes-constructors-destructors: the makefile in the valgrind folder
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all --error-exitcode=99 

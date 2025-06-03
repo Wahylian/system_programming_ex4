@@ -1,3 +1,5 @@
+
+// an enum to represent the different ordering types
 enum orderingTypes {
     AscendingOrder = 0,
     DescendingOrder = 1,

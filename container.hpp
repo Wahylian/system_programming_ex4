@@ -1,11 +1,12 @@
 #pragma once
 #include <vector>
 #include <stdexcept>
-
+#include <iostream>
+#include <string>
 #include <algorithm>
 
 #include "orderingTypes.hpp"
-
+#include "customExceptions.hpp"
 
 #include "Functors/ascending.hpp"
 #include "Functors/descending.hpp"
@@ -16,6 +17,7 @@ using namespace std;
 template <typename T>
 class myContainer {
     private :
+        // a vector to hold the elements of the container
         vector<T>* data;
     public :
         // constructor
@@ -50,6 +52,15 @@ class myContainer {
         // returns true if the container contains the element, false otherwise
         bool contains(const T& element) const;
 
+        // outputs the elements of the container in order of insertion
+        template <typename T>
+        friend ostream& operator<<(ostream& os, const myContainer<T>& container);
+
+    private:
+        // creates a vector of pointers to the elements in the container
+        // this is used to create the iterators for the container
+        vector<T*> createDataPointers();
+
     public:
         // a class of the iterator for the container
         class Iterator{
@@ -63,7 +74,7 @@ class myContainer {
 
                 // the constructor is private to ensure it can only be created by the container
                 // constructor
-                Iterator(const vector<T>& data, orderingTypes &type, int startIndex = 0);
+                Iterator(const vector<T*>& data, orderingTypes &type, int startIndex = 0);
             
             public:
                 // going to the next element prefix increment
@@ -82,7 +93,7 @@ class myContainer {
                 T& operator*();
         };
 
-    
+    // NOTE: need to add const versions of the begin and end functions
     #pragma region begin&end
 
         // returns an iterator to the beginning of the container in ascending order
@@ -164,6 +175,9 @@ void myContainer<T>::addElement(const T& element) {
 
 template <typename T>
 void myContainer<T>::removeElement(const T& element){
+    if(this->isEmpty())
+        throw container_empty(); // throw an exception if the container is empty
+
     bool found = false;
     for(auto it = data->begin(); it != data->end(); ++it) {
         // check if the current element is equal to the element to be removed
@@ -176,7 +190,7 @@ void myContainer<T>::removeElement(const T& element){
         }
     }
     if (!found) {
-        throw std::runtime_error("element_not_found"); // throw an exception if the element was not found
+        throw element_not_found(); // throw an exception if the element was not found
     }
 }
 
@@ -195,15 +209,43 @@ bool myContainer<T>::contains(const T& element) const {
     // checks if the element is in the vector
     return std::find(data->begin(), data->end(), element) != data->end();
 }
+template <typename T>
+inline ostream& operator<<(ostream& os, const myContainer<T>& container) {
+    // goes over the elements of the container in order of insertion
+    auto endIt = container.end_order();
+    os << endl;
+    for(auto it = container.begin_order(); it != endIt; ++it) {
+        // adds the current element to the output stream
+        os << *it << " ";
+    }
+    // go down a line after adding all the elements
+    os << endl;
+    // return the output stream
+    return os;
+}
+
+template <typename T>
+vector<T*> myContainer<T>::createDataPointers(){
+    // create a vector the size of the data vector
+    vector<T*> pointers(data->size());
+
+    // fill the vector with pointers to the elements in the data vector
+    for (size_t i = 0; i < data->size(); ++i) {
+        pointers[i] = &(*data)[i]; // get the address of the element in the vector
+    }
+
+    // return the vector of pointers
+    return pointers;
+}
 
 #pragma region Iter_Imp
 template <typename T>
-myContainer<T>::Iterator::Iterator(const vector<T>& data, orderingTypes &type, int startIndex) : 
-    copyData{}, index(startIndex) {
+myContainer<T>::Iterator::Iterator(const vector<T*>& data, orderingTypes &type, int startIndex) : 
+    index(startIndex), copyData{} {
     // create a temp vector to hold the pointers to the elements in the data vector
     vector<T*> tempData = {};
-    for (const auto& item : data) {
-        tempData.push_back(&item);
+    for (T* pointer : data) {
+        tempData.push_back(pointer); // adds the pointer to the tempData vector
     }
     
     switch (type){
@@ -333,82 +375,82 @@ template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_ascending_order() {
     // creates an iterator to the beginning of the container in ascending order
     orderingTypes type = AscendingOrder;
-    return Iterator(*data, 0, type);
+    return Iterator(this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_ascending_order() {
     // creates an iterator to the end of the container in ascending order
     orderingTypes type = AscendingOrder;
-    return Iterator(*data, data->size(), type);
+    return Iterator(this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_descending_order() {
     // creates an iterator to the beginning of the container in descending order
     orderingTypes type = DescendingOrder;
-    return Iterator(*data, 0, type);
+    return Iterator(this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_dscending_order() {
     // creates an iterator to the end of the container in descending order
     orderingTypes type = DescendingOrder;
-    return Iterator(*data, data->size(), type);
+    return Iterator(this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_side_cross_order() {
     // creates an iterator to the beginning of the container in sidecross order
     orderingTypes type = SideCrossOrder;
-    return Iterator(*data, 0, type);
+    return Iterator(this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_side_cross_order() {
     // creates an iterator to the end of the container in sidecross order
     orderingTypes type = SideCrossOrder;
-    return Iterator(*data, data->size(), type);
+    return Iterator(this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_reverse_order() {
     // creates an iterator to the beginning of the container in reverse order
     orderingTypes type = ReverseOrder;
-    return Iterator(*data, 0, type);
+    return Iterator(this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_reverse_order() {
     // creates an iterator to the end of the container in reverse order
     orderingTypes type = ReverseOrder;
-    return Iterator(*data, data->size(), type);
+    return Iterator(this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_order() {
     // creates an iterator to the beginning of the container in regular order
     orderingTypes type = Order;
-    return Iterator(*data, 0, type);
+    return Iterator(this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_order() {
     // creates an iterator to the end of the container in regular order
     orderingTypes type = Order;
-    return Iterator(*data, data->size(), type);
+    return Iterator(this->createDataPointers(), type, data->size());
 }
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_middle_out_order() {
     // creates an iterator to the beginning of the container in middle out order
     orderingTypes type = MiddleOutOrder;
-    return Iterator(*data, 0, type);
+    return Iterator(this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_middle_out_order() {
     // creates an iterator to the end of the container in middle out order
     orderingTypes type = MiddleOutOrder;
-    return Iterator(*data, data->size(), type);
+    return Iterator(this->createDataPointers(), type, data->size());
 }
 #pragma endregion
