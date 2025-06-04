@@ -53,8 +53,23 @@ class myContainer {
         bool contains(const T& element) const;
 
         // outputs the elements of the container in order of insertion
-        template <typename T>
-        friend ostream& operator<<(ostream& os, const myContainer<T>& container);
+        friend ostream& operator<<(ostream& os, const myContainer<T>& container){
+            // goes over the elements of the container in order of insertion
+            const vector<T> *vector = container.data;
+            os << "{";
+            for(int i = 0; i < vector->size(); ++i) {
+                // adds the element to the output stream
+                os << (*vector)[i];
+                // if not the last element, add a comma and space
+                if (i < vector->size() - 1) {
+                    os << ", ";
+                }
+            }
+            // go down a line after adding all the elements
+            os << "}"<< endl;
+            // return the output stream
+            return os;
+        }
 
     private:
         // creates a vector of pointers to the elements in the container
@@ -68,13 +83,14 @@ class myContainer {
             friend class myContainer<T>;
 
             private:
+                const myContainer<T>* cAddress; // save the address of the container for equality checks
                 int index;
                 // a vector with pointers to the elements in the container
                 vector<T*> copyData;
 
                 // the constructor is private to ensure it can only be created by the container
                 // constructor
-                Iterator(const vector<T*>& data, orderingTypes &type, int startIndex = 0);
+                Iterator(const myContainer<T> *address, const vector<T*>& data, orderingTypes &type, int startIndex = 0);
             
             public:
                 // going to the next element prefix increment
@@ -93,7 +109,6 @@ class myContainer {
                 T& operator*();
         };
 
-    // NOTE: need to add const versions of the begin and end functions
     #pragma region begin&end
 
         // returns an iterator to the beginning of the container in ascending order
@@ -106,7 +121,7 @@ class myContainer {
         Iterator begin_descending_order();
 
         // returns an iterator to the end of the container in descending order
-        Iterator end_dscending_order();
+        Iterator end_descending_order();
 
         // returns an iterator to the beginning of the container in sidecross order
         Iterator begin_side_cross_order();
@@ -209,20 +224,6 @@ bool myContainer<T>::contains(const T& element) const {
     // checks if the element is in the vector
     return std::find(data->begin(), data->end(), element) != data->end();
 }
-template <typename T>
-inline ostream& operator<<(ostream& os, const myContainer<T>& container) {
-    // goes over the elements of the container in order of insertion
-    auto endIt = container.end_order();
-    os << endl;
-    for(auto it = container.begin_order(); it != endIt; ++it) {
-        // adds the current element to the output stream
-        os << *it << " ";
-    }
-    // go down a line after adding all the elements
-    os << endl;
-    // return the output stream
-    return os;
-}
 
 template <typename T>
 vector<T*> myContainer<T>::createDataPointers(){
@@ -240,8 +241,8 @@ vector<T*> myContainer<T>::createDataPointers(){
 
 #pragma region Iter_Imp
 template <typename T>
-myContainer<T>::Iterator::Iterator(const vector<T*>& data, orderingTypes &type, int startIndex) : 
-    index(startIndex), copyData{} {
+myContainer<T>::Iterator::Iterator(const myContainer<T> *address, const vector<T*>& data, orderingTypes &type, int startIndex) : 
+    cAddress{address}, index(startIndex), copyData{} {
     // create a temp vector to hold the pointers to the elements in the data vector
     vector<T*> tempData = {};
     for (T* pointer : data) {
@@ -264,7 +265,6 @@ myContainer<T>::Iterator::Iterator(const vector<T*>& data, orderingTypes &type, 
             break;
         }
         case SideCrossOrder: {
-
             // sort the temp data in ascending order
             sort(tempData.begin(), tempData.end(), Ascending<T>());
             
@@ -288,6 +288,10 @@ myContainer<T>::Iterator::Iterator(const vector<T*>& data, orderingTypes &type, 
             break;
         }
         case ReverseOrder: {
+            // if the vector is empty, break
+            if (tempData.empty()) {
+                break;
+            }
             // add the values from the tempData to the copyData in reverse order
             for(auto it = tempData.end() - 1; it >= tempData.begin(); --it) {
                 copyData.push_back(*it);
@@ -311,7 +315,7 @@ myContainer<T>::Iterator::Iterator(const vector<T*>& data, orderingTypes &type, 
                 } 
                 else { 
                     // if the index is odd, add the element at middleIndex - (i/2 + 1)
-                    copyData.push_back(tempData[middleIndex - (i / 2)]);
+                    copyData.push_back(tempData[middleIndex - (i / 2  + 1)]);
                 }
             }
             break;
@@ -341,12 +345,10 @@ myContainer<T>::Iterator myContainer<T>::Iterator::operator++(int) {
 template <typename T>
 bool myContainer<T>::Iterator::operator==(const Iterator& other) const {
     // make sure the other iterator is talking about the same container
-    if (this->copyData != other.copyData)
-    {
-        // if the copyData vectors are not the same, the iterators are not equal
+    if (this->cAddress != other.cAddress) {
+        // if the addresses of the containers are not the same, the iterators cannot be equal
         return false; 
     }
-    
 
     // check if the index and copyData are the same
     return index == other.index && copyData == other.copyData;
@@ -375,82 +377,82 @@ template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_ascending_order() {
     // creates an iterator to the beginning of the container in ascending order
     orderingTypes type = AscendingOrder;
-    return Iterator(this->createDataPointers(), type, 0);
+    return Iterator(this, this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_ascending_order() {
     // creates an iterator to the end of the container in ascending order
     orderingTypes type = AscendingOrder;
-    return Iterator(this->createDataPointers(), type, data->size());
+    return Iterator(this, this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_descending_order() {
     // creates an iterator to the beginning of the container in descending order
     orderingTypes type = DescendingOrder;
-    return Iterator(this->createDataPointers(), type, 0);
+    return Iterator(this, this->createDataPointers(), type, 0);
 }
 
 template <typename T>
-myContainer<T>::Iterator myContainer<T>::end_dscending_order() {
+myContainer<T>::Iterator myContainer<T>::end_descending_order() {
     // creates an iterator to the end of the container in descending order
     orderingTypes type = DescendingOrder;
-    return Iterator(this->createDataPointers(), type, data->size());
+    return Iterator(this, this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_side_cross_order() {
     // creates an iterator to the beginning of the container in sidecross order
     orderingTypes type = SideCrossOrder;
-    return Iterator(this->createDataPointers(), type, 0);
+    return Iterator(this, this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_side_cross_order() {
     // creates an iterator to the end of the container in sidecross order
     orderingTypes type = SideCrossOrder;
-    return Iterator(this->createDataPointers(), type, data->size());
+    return Iterator(this, this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_reverse_order() {
     // creates an iterator to the beginning of the container in reverse order
     orderingTypes type = ReverseOrder;
-    return Iterator(this->createDataPointers(), type, 0);
+    return Iterator(this, this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_reverse_order() {
     // creates an iterator to the end of the container in reverse order
     orderingTypes type = ReverseOrder;
-    return Iterator(this->createDataPointers(), type, data->size());
+    return Iterator(this, this->createDataPointers(), type, data->size());
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_order() {
     // creates an iterator to the beginning of the container in regular order
     orderingTypes type = Order;
-    return Iterator(this->createDataPointers(), type, 0);
+    return Iterator(this, this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_order() {
     // creates an iterator to the end of the container in regular order
     orderingTypes type = Order;
-    return Iterator(this->createDataPointers(), type, data->size());
+    return Iterator(this, this->createDataPointers(), type, data->size());
 }
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::begin_middle_out_order() {
     // creates an iterator to the beginning of the container in middle out order
     orderingTypes type = MiddleOutOrder;
-    return Iterator(this->createDataPointers(), type, 0);
+    return Iterator(this, this->createDataPointers(), type, 0);
 }
 
 template <typename T>
 myContainer<T>::Iterator myContainer<T>::end_middle_out_order() {
     // creates an iterator to the end of the container in middle out order
     orderingTypes type = MiddleOutOrder;
-    return Iterator(this->createDataPointers(), type, data->size());
+    return Iterator(this, this->createDataPointers(), type, data->size());
 }
 #pragma endregion

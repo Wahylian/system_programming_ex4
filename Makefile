@@ -11,9 +11,15 @@ CONTAINER_OBJ = container.o customExceptions.o $(FUNC_OBJ)
 # object files for custom classes to be used in the tests
 CUSTOM_OBJ = CustomStructs/complex.o
 
+# obkect files for the iterator tests
+ITER = Tests/IteratorTests/
+ITER_TEST_OBJ = $(ITER)testAscendingOrderIter.o $(ITER)testDescendingOrderIter.o \
+		$(ITER)testMiddleOutOrderIter.o $(ITER)testOrderIter.o $(ITER)testReverseOrderIter.o \
+		$(ITER)testSideCrossOrderIter.o
+
 # object files for the test files
 TEST_OBJ = Tests/testFile.o $(CUSTOM_OBJ) Tests/testAscending.o Tests/testDescending.o \
-		Tests/testContainer.o
+		Tests/testContainer.o $(ITER_TEST_OBJ)
 
 # valgrind flags, taken from course site, folder 02-classes-constructors-destructors: the makefile in the valgrind folder
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all --error-exitcode=99 
@@ -38,6 +44,6 @@ valgrind-test: test
 	valgrind $(VALGRIND_FLAGS) ./test
 
 clean:
-	rm -f *.o CustomStructs/*.o Functors/*.o Tests/*.o Main test 
+	rm -f *.o CustomStructs/*.o Functors/*.o Tests/*.o Main test $(ITER)*.o
 
 .PHONY: clean 
