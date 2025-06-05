@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "complex.hpp"
 
 complex::complex(double r, double i) : real(r), imag(i) {}

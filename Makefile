@@ -11,6 +11,9 @@ CONTAINER_OBJ = container.o customExceptions.o $(FUNC_OBJ)
 # object files for custom classes to be used in the tests
 CUSTOM_OBJ = CustomStructs/complex.o
 
+# object files for the main exe
+MAIN_OBJ = main.o $(CONTAINER_OBJ)
+
 # obkect files for the iterator tests
 ITER = Tests/IteratorTests/
 ITER_TEST_OBJ = $(ITER)testAscendingOrderIter.o $(ITER)testDescendingOrderIter.o \
@@ -28,9 +31,9 @@ VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all --error-exitcode=99
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# creates the main executable (gui)
-Main: $(CONTAINER_OBJ)
-	$(CXX) $(CXXFLAGS) -o Main $(CONTAINER_OBJ)
+# creates the main executable 
+Main: $(MAIN_OBJ)
+	$(CXX) $(CXXFLAGS) -o Main $(MAIN_OBJ)
 
 valgrind: Main
 	valgrind $(VALGRIND_FLAGS) ./Main

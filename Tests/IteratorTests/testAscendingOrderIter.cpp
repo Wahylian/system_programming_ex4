@@ -1,9 +1,10 @@
+// rido1607@gmail.com
 #include "testAscendingOrderIter.hpp"
 
 TEST_CASE("Test Begin and End"){
     SUBCASE("Test Begin and End on an Empty Container"){
         // create an empty container
-        myContainer<int> emptyContainer;
+        MyContainer<int> emptyContainer;
 
         // check that the size of the container is 0
         CHECK(emptyContainer.size() == 0);
@@ -20,7 +21,7 @@ TEST_CASE("Test Begin and End"){
     SUBCASE("Test Begin and End on a Non-Empty Container"){
         SUBCASE("With One Element"){
             // create a container with one element
-            myContainer<int> container;
+            MyContainer<int> container;
             container.addElement(42);
 
             // check that the size of the container is 1
@@ -44,7 +45,7 @@ TEST_CASE("Test Begin and End"){
         }
         SUBCASE("With Multiple Elements"){
             // create a container with multiple elements
-            myContainer<int> container;
+            MyContainer<int> container;
             container.addElement(1);
             container.addElement(2);
             container.addElement(3);
@@ -73,13 +74,13 @@ TEST_CASE("Test Begin and End"){
 }
 
 TEST_CASE("Test Iterator from a New Container"){
-    myContainer<int> *container = new myContainer<int>();
+    MyContainer<int> *container = new MyContainer<int>();
     container->addElement(1);
     container->addElement(2);
     container->addElement(3);
 
     // create an iterator to the beginning of the container
-    myContainer<int>::Iterator it = container->begin_ascending_order();
+    MyContainer<int>::Iterator it = container->begin_ascending_order();
 
     // check that the iterator is not equal to the end iterator
     CHECK(it != container->end_ascending_order());
@@ -100,7 +101,7 @@ TEST_CASE("Test Correct Advancing (Prefix)"){
     SUBCASE("Test Advancing Until the End of the Container"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the beginning
         auto it = container.begin_ascending_order();
@@ -127,7 +128,7 @@ TEST_CASE("Test Correct Advancing (Prefix)"){
     SUBCASE("Test Advancing Beyond the End of the Container"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the beginning
         auto it = container.begin_ascending_order();
@@ -154,7 +155,7 @@ TEST_CASE("Test Correct Advancing (Postfix)"){
     SUBCASE("Test Advancing Until the End of the Container"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the beginning
         auto it = container.begin_ascending_order();
@@ -184,7 +185,7 @@ TEST_CASE("Test Correct Advancing (Postfix)"){
     SUBCASE("Test Advancing Beyond the End of the Container"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the beginning
         auto it = container.begin_ascending_order();
@@ -211,7 +212,7 @@ TEST_CASE("Test Operator=="){
     SUBCASE("Test Comparing Two Iterators of the Same Container"){
         SUBCASE("Test Comparing Two Iterators of an Empty Container"){
             // create an empty container
-            myContainer<int> container;
+            MyContainer<int> container;
 
             // get the iterators to the beginning of the container
             auto it1 = container.begin_ascending_order();
@@ -222,7 +223,7 @@ TEST_CASE("Test Operator=="){
         }
         SUBCASE("Test at the Same Position"){
             // create a container with one element
-            myContainer<int> container;
+            MyContainer<int> container;
             container.addElement(42);
 
             // get the iterator to the beginning of the container
@@ -234,7 +235,7 @@ TEST_CASE("Test Operator=="){
         }
         SUBCASE("Test at Different Positions"){
             // create a container with multiple elements
-            myContainer<int> container;
+            MyContainer<int> container;
             container.addElement(1);
             container.addElement(2);
             container.addElement(3);
@@ -253,8 +254,8 @@ TEST_CASE("Test Operator=="){
     SUBCASE("Test Comparing Two Iterators of Different Containers"){
         SUBCASE("Test Comparing Two Iterators of Empty Containers"){
             // create two empty containers
-            myContainer<int> container1;
-            myContainer<int> container2;
+            MyContainer<int> container1;
+            MyContainer<int> container2;
 
             // get the iterators to the beginning of the containers
             auto it1 = container1.begin_ascending_order();
@@ -266,8 +267,8 @@ TEST_CASE("Test Operator=="){
         SUBCASE("Containers with the Same Variables"){
             // create two containers with the same elements
             int arr[] = {1, 2, 3};
-            myContainer<int> container1(arr, arr + 3);
-            myContainer<int> container2(arr, arr + 3);
+            MyContainer<int> container1(arr, arr + 3);
+            MyContainer<int> container2(arr, arr + 3);
 
             // get the iterators to the beginning of the containers
             auto it1 = container1.begin_ascending_order();
@@ -286,8 +287,8 @@ TEST_CASE("Test Operator=="){
             // create two containers with the same elements
             int arr1[] = {1, 2, 3};
             int arr2[] = {4, 5, 6};
-            myContainer<int> container1(arr1, arr1 + 3);
-            myContainer<int> container2(arr2, arr2 + 3);
+            MyContainer<int> container1(arr1, arr1 + 3);
+            MyContainer<int> container2(arr2, arr2 + 3);
 
             // get the iterators to the beginning of the containers
             auto it1 = container1.begin_ascending_order();
@@ -309,7 +310,7 @@ TEST_CASE("Test Operator!="){
     SUBCASE("Test Comparing Two Iterators of the Same Container"){
         SUBCASE("Test Comparing Two Iterators of an Empty Container"){
             // create an empty container
-            myContainer<int> container;
+            MyContainer<int> container;
 
             // get the iterators to the beginning of the container
             auto it1 = container.begin_ascending_order();
@@ -320,7 +321,7 @@ TEST_CASE("Test Operator!="){
         }
         SUBCASE("Test at the Same Position"){
             // create a container with one element
-            myContainer<int> container;
+            MyContainer<int> container;
             container.addElement(42);
 
             // get the iterator to the beginning of the container
@@ -332,7 +333,7 @@ TEST_CASE("Test Operator!="){
         }
         SUBCASE("Test at Different Positions"){
             // create a container with multiple elements
-            myContainer<int> container;
+            MyContainer<int> container;
             container.addElement(1);
             container.addElement(2);
             container.addElement(3);
@@ -351,8 +352,8 @@ TEST_CASE("Test Operator!="){
     SUBCASE("Test Comparing Two Iterators of Different Containers"){
         SUBCASE("Test Comparing Two Iterators of Empty Containers"){
             // create two empty containers
-            myContainer<int> container1;
-            myContainer<int> container2;
+            MyContainer<int> container1;
+            MyContainer<int> container2;
 
             // get the iterators to the beginning of the containers
             auto it1 = container1.begin_ascending_order();
@@ -364,8 +365,8 @@ TEST_CASE("Test Operator!="){
         SUBCASE("Containers with the Same Variables"){
             // create two containers with the same elements
             int arr[] = {1, 2, 3};
-            myContainer<int> container1(arr, arr + 3);
-            myContainer<int> container2(arr, arr + 3);
+            MyContainer<int> container1(arr, arr + 3);
+            MyContainer<int> container2(arr, arr + 3);
 
             // get the iterators to the beginning of the containers
             auto it1 = container1.begin_ascending_order();
@@ -384,8 +385,8 @@ TEST_CASE("Test Operator!="){
             // create two containers with the same elements
             int arr1[] = {1, 2, 3};
             int arr2[] = {4, 5, 6};
-            myContainer<int> container1(arr1, arr1 + 3);
-            myContainer<int> container2(arr2, arr2 + 3);
+            MyContainer<int> container1(arr1, arr1 + 3);
+            MyContainer<int> container2(arr2, arr2 + 3);
 
             // get the iterators to the beginning of the containers
             auto it1 = container1.begin_ascending_order();
@@ -407,7 +408,7 @@ TEST_CASE("Test Accessing Elements"){
     SUBCASE("Test Accessing Elements Outside of the Range"){
         // create a container with mutiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the ending of the container
         auto it = container.end_ascending_order();
@@ -420,7 +421,7 @@ TEST_CASE("Test Accessing Elements"){
     }
     SUBCASE("Test Accessing Elements of an Empty Container"){
         // create an empty container
-        myContainer<int> emptyContainer;
+        MyContainer<int> emptyContainer;
 
         // get the iterator to the beginning of the container
         auto it = emptyContainer.begin_ascending_order();
@@ -430,7 +431,7 @@ TEST_CASE("Test Accessing Elements"){
     }
     SUBCASE("Test Accessing Elements of a Container with One Element"){
         // create a container with one element
-        myContainer<int> container;
+        MyContainer<int> container;
         container.addElement(42);
 
         // get the iterator to the beginning of the container
@@ -442,7 +443,7 @@ TEST_CASE("Test Accessing Elements"){
     SUBCASE("Test Accessing Elements of a Container with Multiple Elements"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the beginning of the container
         auto it = container.begin_ascending_order();
@@ -456,7 +457,7 @@ TEST_CASE("Test Accessing Elements"){
     SUBCASE("Test Accessing at End"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the end of the container
         auto it = container.end_ascending_order();
@@ -467,7 +468,7 @@ TEST_CASE("Test Accessing Elements"){
     SUBCASE("Test Accessing a Container of Complex Numbers"){
         // create a container with complex numbers
         complex arr[] = {complex(1, 2), complex(3, 4), complex(5, 6)};
-        myContainer<complex> complexContainer(arr, arr + 3);
+        MyContainer<complex> complexContainer(arr, arr + 3);
 
         // get the iterator to the beginning of the container
         auto it = complexContainer.begin_ascending_order();
@@ -484,7 +485,7 @@ TEST_CASE("Test Changing Elements"){
     SUBCASE("Test Changing Elements Outside of Range"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the iterator to the ending of the container
         auto it = container.end_ascending_order();
@@ -495,7 +496,7 @@ TEST_CASE("Test Changing Elements"){
     }
     SUBCASE("Test Changing Elements of an Empty Container"){
         // create an empty container
-        myContainer<int> emptyContainer;
+        MyContainer<int> emptyContainer;
 
         // get the iterator to the beginning of the container
         auto it = emptyContainer.begin_ascending_order();
@@ -505,7 +506,7 @@ TEST_CASE("Test Changing Elements"){
     }
     SUBCASE("Test Changing Elements of a Container with One Element"){
         // create a container with one element
-        myContainer<int> container;
+        MyContainer<int> container;
         container.addElement(42);
 
         // get the iterator to the beginning of the container
@@ -526,7 +527,7 @@ TEST_CASE("Test Changing Elements"){
     SUBCASE("Test Changing Element and Accessing It from a Second Iterator"){
         // create a container with multiple elements
         int arr[] = {1, 2, 3, 4, 5};
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // create 2 iterators to the beginning of the container
         auto it1 = container.begin_ascending_order();
@@ -559,7 +560,7 @@ TEST_CASE("Test Changing Elements"){
         SUBCASE("Test Changing Elements of a Container with Multiple Elements"){
             // create a container with multiple elements
             int arr[] = {1, 2, 3, 4, 5};
-            myContainer<int> container(arr, arr + 5);
+            MyContainer<int> container(arr, arr + 5);
 
             // get the iterator to the beginning of the container
             auto it = container.begin_ascending_order();
@@ -593,7 +594,7 @@ TEST_CASE("Test Changing Elements"){
         SUBCASE("Test Changing Last Element"){
             // create a container with multiple elements
             int arr[] = {1, 2, 3, 4, 5};
-            myContainer<int> container(arr, arr + 5);
+            MyContainer<int> container(arr, arr + 5);
 
             // get the iterator to the last element of the container
             auto it = container.begin_ascending_order();
@@ -626,11 +627,25 @@ TEST_CASE("Test Changing Elements"){
                 CHECK(*it2 == arr[i]);
                 ++it2;
             }
+
+            // test that in internal order, the last element is -5
+            auto it3 = container.begin_order();
+
+            CHECK(*it3 == 1);
+            ++it3;
+            CHECK(*it3 == 2);
+            ++it3;
+            CHECK(*it3 == 3);
+            ++it3;
+            CHECK(*it3 == 4);
+            ++it3;
+            // check that the value of the last element is correct
+            CHECK(*it3 == -5);
         }
         SUBCASE("Test Changing First Element"){
             // create a container with multiple elements
             int arr[] = {1, 2, 3, 4, 5};
-            myContainer<int> container(arr, arr + 5);
+            MyContainer<int> container(arr, arr + 5);
 
             // get the iterator to the first element of the container
             auto it = container.begin_ascending_order();
@@ -655,6 +670,18 @@ TEST_CASE("Test Changing Elements"){
             ++it2;
             // check that the value of the last element is correct
             CHECK(*it2 == 100);
+
+            // check that in the internal order, the first element is 100
+            auto it3 = container.begin_order();
+            CHECK(*it3 == 100);
+            ++it3;
+            CHECK(*it3 == 2);
+            ++it3;
+            CHECK(*it3 == 3);
+            ++it3;
+            CHECK(*it3 == 4);
+            ++it3;
+            CHECK(*it3 == 5);
         }
     }
 }
@@ -669,18 +696,18 @@ TEST_CASE("Test Correct Order"){
         }
 
         // create a container with the array
-        myContainer<int> container(arr, arr + 10);
+        MyContainer<int> container(arr, arr + 10);
 
         // sort the array in ascending order
         std::sort(arr, arr + 10);
 
         // create an iterator to the beginning of the container
         auto it = container.begin_ascending_order();
+        int i = 0;
 
         // check that the values of the elements are correct
-        for(int i = 0; i < container.size(); ++i) {
+        for(; it != container.end_ascending_order(); ++it, ++i) {
             CHECK(*it == arr[i]);
-            ++it;
         }
     }
     SUBCASE("Test for Complex Numbers"){
@@ -692,18 +719,18 @@ TEST_CASE("Test Correct Order"){
         }
 
         // create a container with the array
-        myContainer<complex> container(arr, arr + 10);
+        MyContainer<complex> container(arr, arr + 10);
 
         // sort the array in ascending order based on the real part, then imaginary part
         std::sort(arr, arr + 10);
 
         // create an iterator to the beginning of the container
         auto it = container.begin_ascending_order();
+        int i = 0;
 
         // check that the values of the elements are correct
-        for(int i = 0; i < container.size(); ++i) {
+        for(; it != container.end_ascending_order(); ++it, ++i) {
             CHECK(*it == arr[i]);
-            ++it;
         }
     }
 }

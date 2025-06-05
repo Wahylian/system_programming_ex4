@@ -1,8 +1,9 @@
+// rido1607@gmail.com
 #include "testContainer.hpp"
 
 TEST_CASE("Test Container Default Constructor"){
     // create an instance of the container
-    myContainer<int> container;
+    MyContainer<int> container;
 
     // check if the container is empty
     CHECK(container.isEmpty() == true);
@@ -13,13 +14,13 @@ TEST_CASE("Test Container Default Constructor"){
 
 TEST_CASE("Test Container Copy Constructor"){
     // create an instance of the container
-    myContainer<int> c1;
+    MyContainer<int> c1;
 
     // check if the container is empty
     CHECK(c1.isEmpty() == true);
 
     // create a copy of the container
-    myContainer<int> c2(c1);
+    MyContainer<int> c2(c1);
 
     // check if the copy is empty
     CHECK(c2.isEmpty() == true);
@@ -46,7 +47,7 @@ TEST_CASE("Test Container Array Constructor"){
         int arr[] = {};
 
         // create a container from the empty array
-        myContainer<int> container(arr, arr + 0);
+        MyContainer<int> container(arr, arr + 0);
 
         // check if the container is empty
         CHECK(container.isEmpty() == true);
@@ -59,7 +60,7 @@ TEST_CASE("Test Container Array Constructor"){
         int arr[] = {1, 2, 3, 4, 5};
 
         // create a container from the array
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // check if the container is not empty
         CHECK(container.isEmpty() == false);
@@ -79,7 +80,7 @@ TEST_CASE("Test Container Array Constructor"){
         complex arr[] = {complex(1, 2), complex(3, 4), complex(5, 6)};
 
         // create a container from the array
-        myContainer<complex> container(arr, arr + 3);
+        MyContainer<complex> container(arr, arr + 3);
 
         // check if the container is not empty
         CHECK(container.isEmpty() == false);
@@ -97,13 +98,13 @@ TEST_CASE("Test Container Array Constructor"){
 TEST_CASE("Test Container Assignment Operator"){
     SUBCASE("Self Assignment"){
         // create an instance of the container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add an element to the container
         container.addElement(10);
 
         // save the address of the original container
-        myContainer<int> *originalAddress = &container;
+        MyContainer<int> *originalAddress = &container;
 
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wself-assign-overloaded"
@@ -124,7 +125,7 @@ TEST_CASE("Test Container Assignment Operator"){
     }
     SUBCASE("Different Containers"){
         // create a new container
-        myContainer<int> c1;
+        MyContainer<int> c1;
         
         // add an element to the original container
         c1.addElement(20);
@@ -139,13 +140,13 @@ TEST_CASE("Test Container Assignment Operator"){
         CHECK(c1.contains(20) == true);
 
         // save the address of the original container
-        myContainer<int> *originalAddress = &c1;
+        MyContainer<int> *originalAddress = &c1;
 
         // create a new container
-        myContainer<int> c2;
+        MyContainer<int> c2;
 
         // save the address of the new container
-        myContainer<int> *newAddress = &c2;
+        MyContainer<int> *newAddress = &c2;
 
         // assign the original to it
         c2 = c1;
@@ -173,7 +174,7 @@ TEST_CASE("Test Container Assignment Operator"){
 TEST_CASE("Test Container Destructor"){
     SUBCASE("Default Constructor"){
         // create an instance of the container
-        myContainer<int> *container = new myContainer<int>();
+        MyContainer<int> *container = new MyContainer<int>();
 
         // check if the container is empty
         CHECK(container->isEmpty() == true);
@@ -191,7 +192,7 @@ TEST_CASE("Test Container Destructor"){
         delete container;
     }
     SUBCASE("Copy Constructor"){
-        myContainer<int> *c1 = new myContainer<int>();
+        MyContainer<int> *c1 = new MyContainer<int>();
 
         // check if the container is empty
         CHECK(c1->isEmpty() == true);
@@ -203,7 +204,7 @@ TEST_CASE("Test Container Destructor"){
         CHECK(c1->contains(20) == true);
         
         // copy the container
-        myContainer<int> *c2 = new myContainer<int>(*c1);
+        MyContainer<int> *c2 = new MyContainer<int>(*c1);
 
         // check if the copy is not empty
         CHECK(c2->isEmpty() == false);
@@ -238,7 +239,7 @@ TEST_CASE("Test Container Destructor"){
         int *arr = new int[5]{1, 2, 3, 4, 5};
 
         // create a container from the array
-        myContainer<int> *container = new myContainer<int>(arr, arr + 5);
+        MyContainer<int> *container = new MyContainer<int>(arr, arr + 5);
 
         // check if the container is not empty
         CHECK(container->isEmpty() == false);
@@ -264,7 +265,7 @@ TEST_CASE("Test Container Destructor"){
     }
     SUBCASE("Assignment Operator"){
         // create a new container
-        myContainer<int> *c1 = new myContainer<int>();
+        MyContainer<int> *c1 = new MyContainer<int>();
 
         // add an element to the original container
         c1->addElement(10);
@@ -276,13 +277,13 @@ TEST_CASE("Test Container Destructor"){
         CHECK(c1->size() == 1);
 
         // save the address of the original container
-        myContainer<int> *originalAddress = c1;
+        MyContainer<int> *originalAddress = c1;
 
         // create a new container
-        myContainer<int> *c2 = new myContainer<int>();
+        MyContainer<int> *c2 = new MyContainer<int>();
 
         // save the address of the new container
-        myContainer<int> *newAddress = c2;
+        MyContainer<int> *newAddress = c2;
 
         // assign the original to it
         *c2 = *c1;
@@ -314,7 +315,7 @@ TEST_CASE("Test Container Destructor"){
 TEST_CASE("Test Add Element"){
     SUBCASE("Add Element to Empty Container"){
         // create an instance of the container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // check if the container is empty
         CHECK(container.isEmpty() == true);
@@ -337,7 +338,7 @@ TEST_CASE("Test Add Element"){
     SUBCASE("Add Element to Non-Empty Container"){
         // create an instance of a container from an array
         int arr[] = {1, 2, 3};
-        myContainer<int> container(arr, arr + 3);
+        MyContainer<int> container(arr, arr + 3);
 
         // check if the container is not empty
         CHECK(container.isEmpty() == false);
@@ -358,7 +359,7 @@ TEST_CASE("Test Add Element"){
     }
     SUBCASE("Add Duplicate Element"){
         // create an instance of the container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add an element to the container
         container.addElement(5);
@@ -383,7 +384,7 @@ TEST_CASE("Test Add Element"){
 TEST_CASE("Test Remove Element"){
     SUBCASE("Element Exists"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add some elements to the container
         container.addElement(1);
@@ -414,7 +415,7 @@ TEST_CASE("Test Remove Element"){
     }
     SUBCASE("Element Does Not Exist"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add some elements to the container
         container.addElement(1);
@@ -438,7 +439,7 @@ TEST_CASE("Test Remove Element"){
         int arr[] = {1, 2, 2, 3, 2};
 
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // check if the container is not empty
         CHECK(container.isEmpty() == false);
@@ -467,7 +468,7 @@ TEST_CASE("Test Remove Element"){
         int arr[] = {1, 2, 3, 4, 5};
 
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the order iterator
         auto it = container.begin_order();
@@ -490,7 +491,7 @@ TEST_CASE("Test Remove Element"){
         int arr[] = {1, 2, 3, 4, 5};
         
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // get the reverse order iterator
         auto it = container.begin_reverse_order();
@@ -510,7 +511,7 @@ TEST_CASE("Test Remove Element"){
     }
     SUBCASE("Remove Element from Empty Container"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // check if the container is empty
         CHECK(container.isEmpty() == true);
@@ -526,7 +527,7 @@ TEST_CASE("Test Add Elements After Removal"){
         int arr[] = {1, 2, 3, 4, 5};
 
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // remove all elements one by one
         for(int i = 1; i <= 5; ++i) {
@@ -569,7 +570,7 @@ TEST_CASE("Test Add Elements After Removal"){
         int arr[] = {1, 2, 3, 4, 5};
 
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // remove some of the elements
         container.removeElement(3);
@@ -601,14 +602,14 @@ TEST_CASE("Test Add Elements After Removal"){
 TEST_CASE("Test Size Method"){
     SUBCASE("Empty Container"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // check if the size is 0
         CHECK(container.size() == 0);
     }
     SUBCASE("Test After Adding Elements"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add some elements to the container
         container.addElement(1);
@@ -620,7 +621,7 @@ TEST_CASE("Test Size Method"){
     }
     SUBCASE("Test After Removing Elements"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add some elements to the container
         container.addElement(1);
@@ -653,7 +654,7 @@ TEST_CASE("Test Size Method"){
 TEST_CASE("Test IsEmpty Method"){
     SUBCASE("Empty Container"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // check if the container is empty
         CHECK(container.isEmpty() == true);
@@ -663,7 +664,7 @@ TEST_CASE("Test IsEmpty Method"){
         int arr[] = {1, 2, 3, 4, 5};
 
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // check that the container is not empty
         CHECK(container.isEmpty() == false);
@@ -673,7 +674,7 @@ TEST_CASE("Test IsEmpty Method"){
         int arr[] = {1, 2, 3, 4, 5};
 
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // remove all elements one by one
         for(int i = 1; i <= 5; ++i) {
@@ -688,7 +689,7 @@ TEST_CASE("Test IsEmpty Method"){
 TEST_CASE("Test Contains Method"){
     SUBCASE("Existing Element"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add some elements to the container
         container.addElement(1);
@@ -702,7 +703,7 @@ TEST_CASE("Test Contains Method"){
     }
     SUBCASE("Non-Existing Element"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add some elements to the container
         container.addElement(1);
@@ -714,7 +715,7 @@ TEST_CASE("Test Contains Method"){
     }
     SUBCASE("Removed Element"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // add some elements to the container
         container.addElement(1);
@@ -737,7 +738,7 @@ TEST_CASE("Test Contains Method"){
 TEST_CASE("Test Output Stream Operator"){
     SUBCASE("Empty Container"){
         // create an instance of a container
-        myContainer<int> container;
+        MyContainer<int> container;
 
         // create an output stream
         cout<< "Testing output stream operator for empty container" << endl;
@@ -750,7 +751,7 @@ TEST_CASE("Test Output Stream Operator"){
         int arr[] = {1, 2, 3, 4, 5};
 
         // create an instance of a container
-        myContainer<int> container(arr, arr + 5);
+        MyContainer<int> container(arr, arr + 5);
 
         // create an output stream
         cout<< "Testing output stream operator for non-empty container" << endl;
